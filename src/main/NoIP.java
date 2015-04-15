@@ -12,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.commons.codec.binary.Base64;
 
 
 
@@ -20,8 +21,8 @@ public class NoIP extends Thread {
 
 
     public static void main(String[] args) {
-        NoIP n = new NoIP("username@email.com","password");
-        n.submitHostname("servm1.no-ip.biz");
+        NoIP n = new NoIP("anisjribi@gmail.com","annous1992");
+        n.submitHostname("beity.ddns.net");
     }
     
     private String username;
@@ -85,7 +86,7 @@ public class NoIP extends Thread {
         try {
             URL url = new URL(host);
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
-            String auth = Base64.encodeString(username+":"+password);
+            String auth = new String (Base64.encodeBase64((username+":"+password).getBytes()));
             http.setRequestProperty("Authorization","Basic "+auth);    
             http.setRequestProperty("User-Agent","Java NoIP Updated 1.0");    
             BufferedReader br = new BufferedReader(new InputStreamReader(http.getInputStream()));
