@@ -1,14 +1,5 @@
 package upnp;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.teleal.cling.UpnpService;
 import org.teleal.cling.UpnpServiceImpl;
@@ -48,7 +39,8 @@ public class UPnP {
 			// Port Mapping
 			PortMapping desiredMapping = new PortMapping(port, ipAddr, PortMapping.Protocol.TCP, "Home Automation Port Mapping");
 			upnpService = new UpnpServiceImpl( new PortMappingListener(desiredMapping));//, CreateListenerToPrintUPnPDeviceData());
-			upnpService.getControlPoint().search();
+			                 System.out.println(upnpService.getRouter());
+                        upnpService.getControlPoint().search();
 		} else {
 			System.out.println("Error getting internal IP address.");
 			System.out.println("Unable to setup UPnP NAT port mapping without IP address.");
@@ -65,32 +57,4 @@ public class UPnP {
 		upnpService = null;
 	}
 	
-	/**
-	 * Lists devices, services, actions, and action argumensts.
-	 * 
-	 * @return A listener to print out debut information.
-	 */
-	public static RegistryListener CreateListenerToPrintUPnPDeviceData(){
-		RegistryListener Listener = new DefaultRegistryListener(){				
-			@Override
-			public void deviceAdded(Registry registry, Device device) {
-				Service service = device.findService(new UDAServiceId("WANIPConnection"));
-				if (service != null){
-					System.out.println("Found WANIPConnection service.");
-				}
-
-				System.out.println("Added device: " + device.getDisplayString());
-				for (Service s: device.findServices()){
-					System.out.println("   Has Service: " + s.toString());
-					for (Action a: s.getActions()){
-						System.out.println("      Has Action: " + a.getName());
-						for (ActionArgument aArgs: a.getArguments()){
-							System.out.println("         Has Action Argument: " + aArgs.getName());
-						}
-					}
-				}
-			}
-		};
-		return Listener;
-	}
 }
